@@ -1,17 +1,47 @@
 package com.fulviocapone.helloworldmaterial;
 
-import android.support.v7.app.ActionBarActivity;
+import android.support.v4.widget.DrawerLayout;
 import android.os.Bundle;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.BaseAdapter;
+import android.widget.GridView;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+import com.squareup.picasso.Picasso;
 
 
-public class MainActivity extends ActionBarActivity {
+public class MainActivity extends BaseActivity {
+
+    private DrawerLayout drawer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setActionBarIcon(R.drawable.ic_ab_drawer);
+
+        GridView gridView = (GridView) findViewById(R.id.gridView);
+        gridView.setAdapter(new GridViewAdapter());
+        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                String url = (String) view.getTag();
+                DetailActivity.launch(MainActivity.this, view.findViewById(R.id.image), url);
+            }
+        });
+
+        drawer = (DrawerLayout) findViewById(R.id.drawer);
+        drawer.setDrawerShadow(R.drawable.drawer_shadow, Gravity.START);
+    }
+
+    @Override protected int getLayoutResource() {
+        return R.layout.activity_main;
     }
 
 
@@ -24,16 +54,48 @@ public class MainActivity extends ActionBarActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                drawer.openDrawer(Gravity.START);
+                return true;
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private static class GridViewAdapter extends BaseAdapter {
+
+        @Override public int getCount() {
+            return 10;
+        }
+
+        @Override public Object getItem(int i) {
+            return "Item " + String.valueOf(i + 1);
+        }
+
+        @Override public long getItemId(int i) {
+            return i;
+        }
+
+        @Override public View getView(int i, View view, ViewGroup viewGroup) {
+
+            if (view == null) {
+                view = LayoutInflater.from(viewGroup.getContext())
+                        .inflate(R.layout.grid_item, viewGroup, false);
+            }
+
+            String imageUrl = "http://lorempixel.com/800/600/sports/" + String.valueOf(i + 1);
+            view.setTag(imageUrl);
+
+            ImageView image = (ImageView) view.findViewById(R.id.image);
+            Picasso.with(view.getContext())
+                    .load(imageUrl)
+                    .into(image);
+
+            TextView text = (TextView) view.findViewById(R.id.text);
+            text.setText(getItem(i).toString());
+
+            return view;
+        }
     }
 }
