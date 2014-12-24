@@ -1,6 +1,12 @@
 <resources>
-    <color name="colorPrimary">@color/material_blue_grey_800</color>
-    <color name="colorPrimaryDark">@color/material_blue_grey_900</color>
+    <color name="colorPrimary">#9C27B0</color>
+    <color name="colorPrimaryDark">#7B1FA2</color>
+    <color name="colorPrimaryLight">#E1BEE7</color>
+    <color name="colorAccent">#7C4DFF</color>
+    <color name="colorPrimary_text">#212121</color>
+    <color name="colorSecondary_text">#727272</color>
+    <color name="colorIcons">#FFFFFF</color>
+    <color name="colorDivider">#B6B6B6</color>
 
     <color name="colorSecondary">@color/material_deep_teal_200</color>
     <color name="colorSecondaryDark">@color/material_deep_teal_500</color>
